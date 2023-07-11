@@ -11,27 +11,28 @@ class UserTopology(Topo):
     def __init__(self, topology):
         super(UserTopology, self).__init__()
 
-        # Parse the topology string
-        switches, hosts, links = topology.split(';')
-        switches = switches.split(',')
-        hosts = hosts.split(',')
-        links = links.split(',')
+        # Create root node
+        root = self.addSwitch('s1')
 
-        # Add switches to topology
-        for switch in switches:
-            self.addSwitch(switch)
+        if topology[0] == 'tree':
+            self.build_tree(root, topology[1])
+        elif topology[0] == 'mesh':
+            self.build_mesh(root, topology[1])
+        else:
+            self.build_hybrid(root, topology[1])
 
-        # Add hosts to topology
-        for host in hosts:
-            self.addHost(host)
-
-        # Add links to topology
-        for link in links:
-            src, dst = link.split('-')
-            self.addLink(src, dst)
-
-    def build(self):
+    def build_tree(self, root, levels):
+        # I'm either going to do with recursive or with for loops
+        # Each level will have 2 host, with each switch connecting to the previous level switch
         pass
+
+    def build_mesh(self, root, levels):
+        pass
+
+    def build_hybrid(self, root, levels):
+        self.build_mesh(root, levels)
+        self.build_tree(root, levels)
+
 
 
 def run_topology(topology):
@@ -54,5 +55,16 @@ def run_topology(topology):
 
 
 if __name__ == '__main__':
-    topology = input("Enter topology (switches,hosts,links): ")
+    # input for creating topology
+    topology = ['', 0]
+    valid = False
+    while not valid:
+        topology[0] = input("Enter topology type (tree, mesh, hybrid): ").lower()
+        if topology[0] == ("mesh" or "tree" or "hybrid"):
+            valid = True
+    valid = False
+    while not valid:
+        topology[1] = int(input("Enter topology level (1-4):"))
+        if 0 < topology[1] < 5:
+            valid = True
     run_topology(topology)
