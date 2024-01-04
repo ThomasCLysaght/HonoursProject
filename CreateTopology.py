@@ -2,6 +2,7 @@
 from mininet.net import Mininet
 from mininet.topo import Topo
 from mininet.topolib import TreeTopo
+from mininet.node import RemoteController, OVSSwitch
 
 
 
@@ -84,7 +85,8 @@ class UserTopology(Topo):
 
 def run_topology(custom_topology):
     # Create the Mininet network
-    return Mininet(topo=UserTopology(custom_topology))
+    return Mininet(topo=UserTopology(custom_topology),controller=lambda name: RemoteController( name, ip='127.0.0.1', port=6653 ),
+        switch=OVSSwitch)
 
 
 

@@ -1,6 +1,7 @@
 from mininet.cli import CLI
 from CreateTopology import run_topology
 from TestingScript import TestingScript
+from time import sleep
 if __name__ == '__main__':
     # input for creating topology
     topology = ['', 0]
@@ -25,6 +26,7 @@ if __name__ == '__main__':
 
         test = TestingScript(network, 20, topology[0], topology[1], out)
         network.start()
+        sleep(30)
         try:
             test.run_test()
 
